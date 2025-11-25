@@ -1,0 +1,2 @@
+{"_type":"product","_id":"product-apples","name":"Fresh Apples","description":"Crisp, juicy apples perfect for snacking or baking. Locally sourced and always fresh.","price":2.99,"category":"food","inStock":true}
+{"_type":"product","_id":"product-oranges","name":"Organic Oranges","description":"Sweet and tangy oranges packed with vitamin C. Great for fresh juice or healthy snacking.","price":3.49,"category":"food","inStock":true}
