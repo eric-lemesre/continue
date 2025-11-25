@@ -104,6 +104,8 @@ Copy your Sanity project ID and dataset name for the environment variables.
 2. Create two projects: one for frontend (React) and one for backend (Node.js)
 3. Get the DSN for each project
 
+> **Note**: For production deployments with readable error stack traces, see [AGENTS.md](./AGENTS.md#sentry-configuration) for source maps configuration.
+
 ### 6. Set Up Snyk
 
 1. Sign up at [snyk.io](https://snyk.io)
