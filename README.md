@@ -268,13 +268,30 @@ npm start            # Start production server
 - GET `/api/orders/:id` - Get single order
 - PATCH `/api/orders/:id` - Update order status
 
+## Performance Optimizations
+
+### Build Optimizations
+- **Code splitting**: Separate chunks for vendor, analytics, data, and state management libraries
+- **Minification**: Terser-based compression with console removal in production
+- **CSS code splitting**: Separate CSS files for optimal loading
+- **Asset optimization**: Hash-based file names for cache busting
+- **Dependency pre-bundling**: Pre-optimized common dependencies
+
+### Caching Strategy
+- **Long-term caching**: 1-year cache for immutable assets (JS, CSS, fonts, images)
+- **Cache-Control headers**: Configured in Netlify for optimal CDN performance
+- **Asset hashing**: Content-based hashes ensure fresh content on updates
+
 ## Security
 
 - HTTPS enforced on Netlify
 - Row-level security on Supabase
 - Environment variables for sensitive data
 - CORS configured for API
-- Security headers configured in Netlify
+- Security headers configured in Netlify:
+  - `X-Frame-Options: DENY` - Prevents clickjacking
+  - `X-Content-Type-Options: nosniff` - Prevents MIME type sniffing
+  - `Referrer-Policy: strict-origin-when-cross-origin` - Protects referrer information
 - Regular vulnerability scans with Snyk
 
 ## Contributing
