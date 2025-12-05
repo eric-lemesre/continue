@@ -598,6 +598,7 @@ export const sessionSlice = createSlice({
               },
               contextItems: [],
             };
+            handleToolCallsInMessage(message, historyItem);
             state.history.push(historyItem);
             lastItem = state.history[state.history.length - 1];
             lastMessage = lastItem.message;

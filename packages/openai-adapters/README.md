@@ -28,7 +28,7 @@ They are concerned with:
 - [x] Anthropic
 - [ ] AskSage
 - [x] Azure
-- [x] Bedrock
+- [ ] Bedrock
 - [ ] Bedrock Import
 - [x] Cerebras
 - [ ] Cloudflare
@@ -62,7 +62,7 @@ They are concerned with:
 - [x] Together
 - [x] Novita AI
 - [x] Vllm
-- [x] Vertex AI
+- [ ] Vertex AI
 - [x] Voyage AI
 - [x] WatsonX
 - [x] xAI

@@ -850,10 +850,14 @@
                 "anyOf": [
                   {
                     "enum": [
-                      "claude-sonnet-4",
-                      "claude-sonnet-4-5",
-                      "claude-opus-4-1",
-                      "claude-haiku-4-5"
+                      "claude-2",
+                      "claude-instant-1",
+                      "claude-3-5-sonnet-latest",
+                      "claude-3-7-sonnet-20250219",
+                      "claude-3-opus-20240229",
+                      "claude-3-sonnet-20240229",
+                      "claude-3-haiku-20240307",
+                      "claude-2.1"
                     ]
                   },
                   {
@@ -1606,10 +1610,14 @@
                       "codeup-13b",
                       "deepseek-7b",
                       "deepseek-33b",
-                      "claude-sonnet-4",
-                      "claude-sonnet-4-5",
-                      "claude-opus-4-1",
-                      "claude-haiku-4-5",
+                      "claude-2",
+                      "claude-instant-1",
+                      "claude-3-5-sonnet-latest",
+                      "claude-3-5-sonnet-20240620",
+                      "claude-3-opus-20240229",
+                      "claude-3-sonnet-20240229",
+                      "claude-3-haiku-20240307",
+                      "claude-2.1",
                       "command-r",
                       "command-r-plus",
                       "chat-bison-001",

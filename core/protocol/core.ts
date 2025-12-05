@@ -90,11 +90,8 @@ export type ToCoreFromIdeOrWebviewProtocol = {
     },
     void,
   ];
-  "config/addLocalWorkspaceBlock": [
-    { blockType: BlockType; baseFilename?: string },
-    void,
-  ];
-  "config/addGlobalRule": [undefined | { baseFilename?: string }, void];
+  "config/addLocalWorkspaceBlock": [{ blockType: BlockType }, void];
+  "config/addGlobalRule": [undefined, void];
   "config/newPromptFile": [undefined, void];
   "config/newAssistantFile": [undefined, void];
   "config/ideSettingsUpdate": [IdeSettings, void];

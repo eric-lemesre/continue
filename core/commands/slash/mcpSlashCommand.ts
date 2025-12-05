@@ -23,15 +23,7 @@ export function stringifyMcpPrompt(
   let stringified = "";
   for (const message of messages) {
     if (message.content.type === "text") {
-      const role =
-        "role" in message.content && typeof message.content.role === "string"
-          ? message.content.role
-          : message.content._meta &&
-              "role" in message.content._meta &&
-              typeof message.content._meta.role === "string"
-            ? message.content._meta.role
-            : "assistant";
-      stringified += `<${role}/>\n${message.content.text}\n<${role}/>`;
+      stringified += `<${message.content.role}/>\n${message.content.text}\n<${message.content.role}/>`;
     } else {
       console.warn(
         `MCP Prompt conversion warning: ${message.content.type} content is not yet supported, message skipped`,

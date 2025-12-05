@@ -8,10 +8,6 @@ Morph provides a fast apply model that helps you quickly and accurately apply co
 <Tabs>
    <Tab title="YAML">
    ```yaml title="config.yaml"
-   name: My Config
-   version: 0.0.1
-   schema: v1
-
    models:
      - uses: morphllm/morph-v0
        with:
@@ -19,10 +15,6 @@ Morph provides a fast apply model that helps you quickly and accurately apply co
 ```
 or
 ```yaml title="config.yaml"
-     name: My Config
-     version: 0.0.1
-     schema: v1
-
      - name: Morph Fast Apply
        provider: openai
        model: morph-v2
@@ -62,10 +54,6 @@ We recommend configuring **morph-embedding-v2** as your embeddings model.
 <Tabs>
   <Tab title="YAML">
   ```yaml title="config.yaml"
-  name: My Config
-  version: 0.0.1
-  schema: v1
-
   models:
     - name: Morph Embeddings
       provider: openai
@@ -97,10 +85,6 @@ We recommend configuring **morph-rerank-v2** as your reranking model.
 <Tabs>
   <Tab title="YAML">
   ```yaml title="config.yaml"
-  name: My Config
-  version: 0.0.1
-  schema: v1
-
   models:
     - name: Morph Reranker
       provider: cohere

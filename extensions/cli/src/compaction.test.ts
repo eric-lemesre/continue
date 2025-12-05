@@ -385,10 +385,8 @@ describe("compaction", () => {
       ]);
 
       await compactChatHistory(history, mockModel, mockLlmApi, {
-        callbacks: {
-          onStreamContent,
-          onStreamComplete,
-        },
+        onStreamContent,
+        onStreamComplete,
       });
 
       expect(onStreamContent).toHaveBeenCalledWith("Summary ");
@@ -408,9 +406,7 @@ describe("compaction", () => {
       ]);
 
       await expect(
-        compactChatHistory(history, mockModel, mockLlmApi, {
-          callbacks: { onError },
-        }),
+        compactChatHistory(history, mockModel, mockLlmApi, { onError }),
       ).rejects.toThrow("Stream failed");
 
       expect(onError).toHaveBeenCalledWith(mockError);

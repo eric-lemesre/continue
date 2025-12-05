@@ -154,7 +154,7 @@ const Layout = () => {
       dispatch(
         setDialogMessage(
           <div className="flex-1">
-            <OnboardingCard isDialog />
+            <OnboardingCard isDialog showFreeTrialExceededAlert />
           </div>,
         ),
       );

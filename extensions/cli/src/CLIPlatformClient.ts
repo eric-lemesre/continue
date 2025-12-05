@@ -105,10 +105,9 @@ export class CLIPlatformClient implements PlatformClient {
         },
       });
 
-      // Merge API results into our results array - but only if they have an actual value
-      // API can return found=true for secrets that exist but aren't accessible locally
+      // Merge API results into our results array
       for (let i = 0; i < apiResults.length; i++) {
-        if (apiResults[i]?.found && "value" in apiResults[i]) {
+        if (apiResults[i]?.found) {
           results[i] = apiResults[i];
         }
       }
@@ -120,10 +119,9 @@ export class CLIPlatformClient implements PlatformClient {
       );
     }
 
-    // For any secret without a value (not just "not found"), look in local .env files
-    // This allows environment variables to override org/package secrets that aren't accessible
+    // For any secret that wasn't found via API, look in local .env files
     for (let i = 0; i < fqsns.length; i++) {
-      if (!results[i] || !("value" in results[i]!)) {
+      if (!results[i]?.found) {
         const secretFromEnv = this.findSecretInLocalEnvFiles(fqsns[i]);
         if (secretFromEnv?.found) {
           results[i] = secretFromEnv;

@@ -1,6 +1,7 @@
 import iconv from "iconv-lite";
 import childProcess from "node:child_process";
 import os from "node:os";
+import util from "node:util";
 import { ContinueError, ContinueErrorReason } from "../../util/errors";
 // Automatically decode the buffer according to the platform to avoid garbled Chinese
 function getDecodedOutput(data: Buffer): string {
@@ -43,25 +44,7 @@ import {
 } from "../../util/processTerminalStates";
 import { getBooleanArg, getStringArg } from "../parseArgs";
 
-/**
- * Resolves the working directory from workspace dirs.
- * Falls back to home directory or temp directory if no workspace is available.
- */
-function resolveWorkingDirectory(workspaceDirs: string[]): string {
-  const fileWorkspaceDir = workspaceDirs.find((dir) =>
-    dir.startsWith("file:/"),
-  );
-  if (fileWorkspaceDir) {
-    return fileURLToPath(fileWorkspaceDir);
-  }
-  // Default to user's home directory with fallbacks
-  try {
-    return process.env.HOME || process.env.USERPROFILE || process.cwd();
-  } catch {
-    // Final fallback if even process.cwd() fails - use system temp directory
-    return os.tmpdir();
-  }
-}
+const asyncExec = util.promisify(childProcess.exec);
 
 // Add color-supporting environment variables
 const getColorEnv = () => ({
@@ -99,7 +82,20 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
     if (extras.onPartialOutput) {
       try {
         const workspaceDirs = await extras.ide.getWorkspaceDirs();
-        const cwd = resolveWorkingDirectory(workspaceDirs);
+
+        // Handle case where no workspace is available
+        let cwd: string;
+        if (workspaceDirs.length > 0) {
+          cwd = fileURLToPath(workspaceDirs[0]);
+        } else {
+          // Default to user's home directory with fallbacks
+          try {
+            cwd = process.env.HOME || process.env.USERPROFILE || process.cwd();
+          } catch (error) {
+            // Final fallback if even process.cwd() fails - use system temp directory
+            cwd = os.tmpdir();
+          }
+        }
 
         return new Promise((resolve, reject) => {
           let terminalOutput = "";
@@ -285,7 +281,20 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
     } else {
       // Fallback to non-streaming for older clients
       const workspaceDirs = await extras.ide.getWorkspaceDirs();
-      const cwd = resolveWorkingDirectory(workspaceDirs);
+
+      // Handle case where no workspace is available
+      let cwd: string;
+      if (workspaceDirs.length > 0) {
+        cwd = fileURLToPath(workspaceDirs[0]);
+      } else {
+        // Default to user's home directory with fallbacks
+        try {
+          cwd = process.env.HOME || process.env.USERPROFILE || process.cwd();
+        } catch (error) {
+          // Final fallback if even process.cwd() fails - use system temp directory
+          cwd = os.tmpdir();
+        }
+      }
 
       if (waitForCompletion) {
         // Standard execution, waiting for completion

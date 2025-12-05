@@ -22,27 +22,22 @@ export interface CompactionCallbacks {
   onError?: (error: Error) => void;
 }
 
-export interface CompactionOptions {
-  callbacks?: CompactionCallbacks;
-  abortController?: AbortController;
-  systemMessageTokens?: number;
-}
-
 /**
  * Compacts a chat history into a summarized form
  * @param chatHistory The current chat history to compact
  * @param model The model configuration
  * @param llmApi The LLM API instance
- * @param options Optional configuration including callbacks, abort controller, and system message tokens
+ * @param callbacks Optional callbacks for streaming updates
+ * @param abortController Optional abort controller for cancellation
  * @returns The compacted history with compaction index
  */
 export async function compactChatHistory(
   chatHistory: ChatHistoryItem[],
   model: ModelConfig,
   llmApi: BaseLlmApi,
-  options?: CompactionOptions,
+  callbacks?: CompactionCallbacks,
+  abortController?: AbortController,
 ): Promise<CompactionResult> {
-  const { callbacks, abortController, systemMessageTokens = 0 } = options || {};
   // Create a prompt to summarize the conversation
   const compactionPrompt: ChatHistoryItem = {
     message: {
@@ -61,19 +56,7 @@ export async function compactChatHistory(
   const maxTokens = model.defaultCompletionOptions?.maxTokens;
   const reservedForOutput =
     maxTokens === undefined ? Math.ceil(contextLimit * 0.35) : maxTokens;
-
-  // Check if system message is already in the history to avoid double-counting
-  const hasSystemMessageInHistory = chatHistory.some(
-    (item) => item.message.role === "system",
-  );
-
-  // Account for system message (if not already in history) AND safety buffer
-  const SAFETY_BUFFER = 100;
-  const systemMessageReservation = hasSystemMessageInHistory
-    ? 0
-    : systemMessageTokens;
-  const availableForInput =
-    contextLimit - reservedForOutput - systemMessageReservation - SAFETY_BUFFER;
+  const availableForInput = contextLimit - reservedForOutput;
 
   // Check if we need to prune to fit within context
   while (

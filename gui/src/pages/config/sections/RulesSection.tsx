@@ -20,7 +20,6 @@ import {
 import { getRuleDisplayName } from "core/llm/rules/rules-utils";
 import { useContext, useMemo, useState } from "react";
 import { DropdownButton } from "../../../components/DropdownButton";
-import AddRuleDialog from "../../../components/dialogs/AddRuleDialog";
 import HeaderButtonWithToolTip from "../../../components/gui/HeaderButtonWithToolTip";
 import Switch from "../../../components/gui/Switch";
 import {
@@ -394,24 +393,22 @@ function RulesSubSection() {
   const config = useAppSelector((store) => store.config.config);
   const mode = useAppSelector((store) => store.session.mode);
   const ideMessenger = useContext(IdeMessengerContext);
-  const dispatch = useAppDispatch();
   const isLocal = selectedProfile?.profileType === "local";
   const [globalRulesMode, setGlobalRulesMode] = useState<string>("workspace");
 
   const handleAddRule = (mode?: string) => {
     const currentMode = mode || globalRulesMode;
     if (isLocal) {
-      dispatch(setShowDialog(true));
-      dispatch(
-        setDialogMessage(
-          <AddRuleDialog
-            mode={currentMode === "global" ? "global" : "workspace"}
-          />,
-        ),
-      );
+      if (currentMode === "global") {
+        void ideMessenger.request("config/addGlobalRule", undefined);
+      } else {
+        void ideMessenger.request("config/addLocalWorkspaceBlock", {
+          blockType: "rules",
+        });
+      }
     } else {
       void ideMessenger.request("controlPlane/openUrl", {
-        path: "/hub?type=rules",
+        path: "?type=rules",
         orgSlug: undefined,
       });
     }

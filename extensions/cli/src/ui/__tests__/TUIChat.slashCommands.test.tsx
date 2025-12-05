@@ -1,5 +1,5 @@
 import { renderInMode, testBothModes } from "./TUIChat.dualModeHelper.js";
-import { waitForCondition } from "./TUIChat.testHelper.js";
+import { waitForNextRender } from "./TUIChat.testHelper.js";
 
 describe("TUIChat - Slash Commands Tests", () => {
   testBothModes("shows slash when user types /", async (mode) => {
@@ -7,12 +7,9 @@ describe("TUIChat - Slash Commands Tests", () => {
 
     // Type / to trigger slash command
     stdin.write("/");
+    await waitForNextRender();
 
-    let frame = "";
-    await waitForCondition(() => {
-      frame = lastFrame() ?? "";
-      return frame.includes("/");
-    });
+    const frame = lastFrame();
 
     // Should show the slash character
     expect(frame).toContain("/");
@@ -31,13 +28,9 @@ describe("TUIChat - Slash Commands Tests", () => {
 
     // Type /exi to trigger slash command filtering
     stdin.write("/exi");
+    await waitForNextRender();
 
-    let frame = lastFrame();
-
-    await waitForCondition(() => {
-      frame = lastFrame();
-      return frame?.includes("/exi") ?? false;
-    });
+    const frame = lastFrame();
 
     // Should show the typed command
     expect(frame).toContain("/exi");
@@ -54,21 +47,14 @@ describe("TUIChat - Slash Commands Tests", () => {
   testBothModes("handles tab key after slash command", async (mode) => {
     const { lastFrame, stdin } = renderInMode(mode);
 
+    // Type /exi and then tab
     stdin.write("/exi");
-
-    let frame = "";
-    await waitForCondition(() => {
-      frame = lastFrame() ?? "";
-      return frame.includes("/exi");
-    });
+    await waitForNextRender();
 
     stdin.write("\t");
+    await waitForNextRender();
 
-    let frameAfterTab = "";
-    await waitForCondition(() => {
-      frameAfterTab = lastFrame() ?? "";
-      return frameAfterTab.length > 0;
-    });
+    const frameAfterTab = lastFrame();
 
     // Should not crash after tab
     expect(frameAfterTab).toBeDefined();
@@ -87,13 +73,11 @@ describe("TUIChat - Slash Commands Tests", () => {
   testBothModes("shows slash command menu when typing /", async (mode) => {
     const { lastFrame, stdin } = renderInMode(mode);
 
+    // Type just /
     stdin.write("/");
+    await waitForNextRender();
 
-    let frame = "";
-    await waitForCondition(() => {
-      frame = lastFrame() ?? "";
-      return frame.includes("/");
-    });
+    const frame = lastFrame();
 
     // Should show the slash
     expect(frame).toContain("/");
@@ -123,18 +107,9 @@ describe("TUIChat - Slash Commands Tests", () => {
 
       // Type a complete command name first
       stdin.write("/title");
+      await waitForNextRender();
 
-      let frameAfterCommand = lastFrame();
-      await waitForCondition(() => {
-        frameAfterCommand = lastFrame();
-
-        return (
-          frameAfterCommand?.includes(
-            mode === "remote" ? "Remote Mode" : "/title",
-          ) ?? false
-        );
-      });
-
+      const frameAfterCommand = lastFrame();
       if (mode === "remote") {
         // In remote mode, /title might not be a valid command, so just check we're in remote mode
         expect(frameAfterCommand).toContain("Remote Mode");
@@ -145,12 +120,9 @@ describe("TUIChat - Slash Commands Tests", () => {
 
       // Now add a space and arguments
       stdin.write(" My Session Title");
+      await waitForNextRender();
 
-      let frameAfterArgs = lastFrame();
-      await waitForCondition(() => {
-        frameAfterArgs = lastFrame() ?? "";
-        return frameAfterArgs.includes("My Session Title");
-      });
+      const frameAfterArgs = lastFrame();
 
       // Check that the UI is still functional after adding arguments
       if (mode === "remote") {
@@ -169,27 +141,19 @@ describe("TUIChat - Slash Commands Tests", () => {
     async (mode) => {
       const { lastFrame, stdin } = renderInMode(mode);
 
+      // Type a complete command with arguments
       stdin.write("/title Test Session");
+      await waitForNextRender();
 
-      let frameBeforeEnter = lastFrame();
-      await waitForCondition(() => {
-        frameBeforeEnter = lastFrame() ?? "";
-        return (
-          frameBeforeEnter.includes("/title") &&
-          frameBeforeEnter.includes("Test Session")
-        );
-      });
-
+      const frameBeforeEnter = lastFrame();
       expect(frameBeforeEnter).toContain("/title");
       expect(frameBeforeEnter).toContain("Test Session");
 
+      // Press Enter - this should execute the command, not try to autocomplete
       stdin.write("\r");
+      await waitForNextRender();
 
-      let frameAfterEnter = lastFrame();
-      await waitForCondition(() => {
-        frameAfterEnter = lastFrame() ?? "";
-        return frameAfterEnter.length > 0;
-      });
+      const frameAfterEnter = lastFrame();
 
       // Should not crash and should clear the input (or show command execution)
       expect(frameAfterEnter).toBeDefined();

@@ -100,7 +100,7 @@ export class ConfigHandler {
     return `${workspaceId}:::${orgId}`;
   }
 
-  private async cascadeInit(reason: string, isLogin?: boolean) {
+  private async cascadeInit(reason: string) {
     const signal = this.cascadeAbortController.signal;
     this.workspaceDirs = null; // forces workspace dirs reload
 
@@ -118,12 +118,7 @@ export class ConfigHandler {
       const workspaceId = await this.getWorkspaceId();
       const selectedOrgs =
         this.globalContext.get("lastSelectedOrgIdForWorkspace") ?? {};
-      let currentSelection = selectedOrgs[workspaceId];
-
-      // reset personal org to first available non-personal org on login
-      if (isLogin && currentSelection === "personal") {
-        currentSelection = null;
-      }
+      const currentSelection = selectedOrgs[workspaceId];
 
       const firstNonPersonal = orgs.find(
         (org) => org.id !== this.PERSONAL_ORG_DESC.id,
@@ -407,7 +402,6 @@ export class ConfigHandler {
     const newSession = sessionInfo;
 
     let reload = false;
-    let isLogin = false;
     if (newSession) {
       if (currentSession) {
         if (
@@ -422,7 +416,6 @@ export class ConfigHandler {
       } else {
         // log in
         reload = true;
-        isLogin = true;
       }
     } else {
       if (currentSession) {
@@ -437,7 +430,7 @@ export class ConfigHandler {
         this.ide,
       );
       this.abortCascade();
-      await this.cascadeInit("Control plane session info update", isLogin);
+      await this.cascadeInit("Control plane session info update");
     }
     return reload;
   }

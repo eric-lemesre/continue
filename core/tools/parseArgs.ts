@@ -18,38 +18,15 @@ export function getStringArg(
   argName: string,
   allowEmpty = false,
 ): string {
-  if (!args || !(argName in args)) {
+  if (!args || !(argName in args) || typeof args[argName] !== "string") {
     throw new Error(
       `\`${argName}\` argument is required${allowEmpty ? "" : " and must not be empty or whitespace-only"}. (type string)`,
     );
   }
-
-  let value = args[argName];
-
-  // Handle case where JSON was parsed into an object by the tool call parser.
-  // If the arguments to the tool call are valid JSON (e.g. the model attempts to create a .json file)
-  // the earlier call to JSON.parse() will have deeply parsed the returned arguments.
-  // If that has happened, convert back to string.
-  if (typeof value === "object" && value !== null) {
-    try {
-      value = JSON.stringify(value);
-      return value;
-    } catch (e) {
-      //Swallow this, because it might be fine later.
-    }
-  }
-
-  if (typeof value !== "string") {
-    throw new Error(
-      `\`${argName}\` argument is required${allowEmpty ? "" : " and must not be empty or whitespace-only"}. (type string)`,
-    );
-  }
-
-  if (!allowEmpty && !value.trim()) {
+  if (!allowEmpty && !args[argName].trim()) {
     throw new Error(`Argument ${argName} must not be empty or whitespace-only`);
   }
-
-  return value;
+  return args[argName];
 }
 
 export function getOptionalStringArg(

@@ -409,11 +409,7 @@ export class Core {
     });
 
     on("config/addLocalWorkspaceBlock", async (msg) => {
-      await createNewWorkspaceBlockFile(
-        this.ide,
-        msg.data.blockType,
-        msg.data.baseFilename,
-      );
+      await createNewWorkspaceBlockFile(this.ide, msg.data.blockType);
       await this.configHandler.reloadConfig(
         "Local block created (config/addLocalWorkspaceBlock message)",
       );
@@ -421,7 +417,7 @@ export class Core {
 
     on("config/addGlobalRule", async (msg) => {
       try {
-        await createNewGlobalRuleFile(this.ide, msg.data?.baseFilename);
+        await createNewGlobalRuleFile(this.ide);
         await this.configHandler.reloadConfig(
           "Global rule created (config/addGlobalRule message)",
         );

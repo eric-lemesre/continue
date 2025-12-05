@@ -6,6 +6,7 @@ import OllamaLogo from "../../svg/OllamaLogo";
 interface OnboardingCardTabsProps {
   activeTab: OnboardingModes;
   onTabClick: (tabName: OnboardingModes) => void;
+  showFreeTrialExceededAlert?: boolean;
 }
 
 const renderTabButton = (
@@ -67,13 +68,27 @@ const renderTabButton = (
 export function OnboardingCardTabs({
   activeTab,
   onTabClick,
+  showFreeTrialExceededAlert,
 }: OnboardingCardTabsProps) {
-  // Show Models Add-On (Credits) first as the primary option
-  const tabs = [
-    OnboardingModes.MODELS_ADD_ON,
-    OnboardingModes.API_KEY,
-    OnboardingModes.LOCAL,
-  ];
+  /**
+   * When users initially install, we only render these tabs after they've
+   * declined the free trial, so we show the upgrade tab last since they've
+   * indicated they want don't want to use the Hub.
+   *
+   * If `showFreeTrialExceededAlert` is true, they've used the Hub, so show
+   * upgrade first.
+   */
+  const tabs = showFreeTrialExceededAlert
+    ? [
+        OnboardingModes.MODELS_ADD_ON,
+        OnboardingModes.API_KEY,
+        OnboardingModes.LOCAL,
+      ]
+    : [
+        OnboardingModes.API_KEY,
+        OnboardingModes.LOCAL,
+        OnboardingModes.MODELS_ADD_ON,
+      ];
   return (
     <div>
       <div className="hidden sm:block">

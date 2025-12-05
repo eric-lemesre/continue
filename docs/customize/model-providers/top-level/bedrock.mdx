@@ -17,10 +17,6 @@ sidebarTitle: "Amazon Bedrock"
 <Tabs>
   <Tab title="YAML">
   ```yaml title="config.yaml"
-  name: My Config
-  version: 0.0.1
-  schema: v1
-
   models:
     - name: <MODEL_NAME>
       provider: bedrock
@@ -61,10 +57,6 @@ messages between requests. Enable this behavior by adding
 configuration.
 
 ```yaml title="config.yaml"
-name: My Config
-version: 0.0.1
-schema: v1
-
 models:
   - name: <MODEL_NAME>
     provider: bedrock
@@ -92,10 +84,6 @@ You can also use an AWS `accessKeyId` and `secretAccessKey` for authentication i
 <Tabs>
   <Tab title="YAML">
   ```yaml title="config.yaml"
-  name: My Config
-  version: 0.0.1
-  schema: v1
-
   models:
     - name: <MODEL_NAME>
       provider: bedrock
@@ -133,10 +121,6 @@ To setup Bedrock using custom imported models, add the following to your config 
 <Tabs>
   <Tab title="YAML">
   ```yaml title="config.yaml"
-  name: My Config
-  version: 0.0.1
-  schema: v1
-
   models:
     - name: <MODEL_NAME>
       provider: bedrockimport

@@ -44,9 +44,13 @@ export async function handleCompactCommand({
 
   try {
     // Compact the chat history directly (already in unified format) with abort controller
-    const result = await compactChatHistory(chatHistory, model, llmApi, {
-      abortController: compactionController,
-    });
+    const result = await compactChatHistory(
+      chatHistory,
+      model,
+      llmApi,
+      undefined,
+      compactionController,
+    );
 
     // Check if operation was aborted before proceeding with success actions
     if (compactionController.signal.aborted) {
@@ -149,9 +153,13 @@ export async function handleAutoCompaction({
     logger.info("Auto-compaction triggered for TUI mode");
 
     // Compact the unified history
-    const result = await compactChatHistory(chatHistory, model, llmApi, {
+    const result = await compactChatHistory(
+      chatHistory,
+      model,
+      llmApi,
+      undefined,
       abortController,
-    });
+    );
 
     // Keep the system message and append the compaction summary
     // This replaces the old messages with a summary to reduce context size

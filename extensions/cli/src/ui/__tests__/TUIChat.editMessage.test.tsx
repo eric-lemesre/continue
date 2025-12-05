@@ -1,5 +1,4 @@
-import { renderInMode, testBothModes } from "./TUIChat.dualModeHelper.js";
-import { waitForCondition } from "./TUIChat.testHelper.js";
+import { testBothModes, renderInMode } from "./TUIChat.dualModeHelper.js";
 
 /**
  * Integration tests for the message edit feature in TUIChat
@@ -11,6 +10,7 @@ import { waitForCondition } from "./TUIChat.testHelper.js";
  * 4. History is rewound and new message is submitted
  * 5. Chat updates correctly
  */
+
 describe("TUIChat - Message Edit Feature", () => {
   testBothModes("double Esc should open edit selector", async (mode) => {
     const { lastFrame, stdin } = renderInMode(mode);
@@ -119,11 +119,7 @@ describe("TUIChat - Message Edit Feature", () => {
       // Perform various operations
       stdin.write("\u001b");
       stdin.write("\u001b"); // Open edit with separate Esc presses
-
-      // Wait for selector to open (poll instead of fixed timeout)
-      await waitForCondition(
-        () => lastFrame()?.includes("No user messages to edit") ?? false,
-      );
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Verify selector opened
       let frame = lastFrame();
@@ -134,11 +130,7 @@ describe("TUIChat - Message Edit Feature", () => {
       await new Promise((resolve) => setTimeout(resolve, 50));
 
       stdin.write("\u001b"); // Close
-
-      // Wait for selector to close (poll instead of fixed timeout)
-      await waitForCondition(
-        () => !(lastFrame()?.includes("No user messages to edit") ?? true),
-      );
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       frame = lastFrame();
 

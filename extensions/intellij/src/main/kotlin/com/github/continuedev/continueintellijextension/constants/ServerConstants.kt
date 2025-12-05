@@ -14,10 +14,10 @@ const val DEFAULT_CONFIG =
 {
   "models": [
     {
-      "model": "claude-sonnet-4-5",
+      "model": "claude-3-5-sonnet-latest",
       "provider": "anthropic",
       "apiKey": "",
-      "title": "Claude Sonnet 4.5"
+      "title": "Claude 3.5 Sonnet"
     }
   ],
   "tabAutocompleteModel": {

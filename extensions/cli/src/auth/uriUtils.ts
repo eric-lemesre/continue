@@ -1,13 +1,9 @@
-import { normalize } from "path";
-import { fileURLToPath, pathToFileURL } from "url";
-
 /**
  * URI utility functions for auth config
  */
 
 export function pathToUri(path: string): string {
-  const normalizedPath = normalize(path);
-  return pathToFileURL(normalizedPath).href;
+  return `file://${path}`;
 }
 
 export function slugToUri(slug: string): string {
@@ -18,11 +14,7 @@ export function uriToPath(uri: string): string | null {
   if (!uri.startsWith("file://")) {
     return null;
   }
-  try {
-    return fileURLToPath(uri);
-  } catch {
-    return null;
-  }
+  return uri.slice(7);
 }
 
 export function uriToSlug(uri: string): string | null {

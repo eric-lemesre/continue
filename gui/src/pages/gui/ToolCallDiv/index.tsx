@@ -31,7 +31,6 @@ export function ToolCallDiv({
   const activeCalls = toolCallStates.filter(
     (call) => call.status !== "canceled",
   );
-  const pendingCalls = toolCallStates.filter((call) => call.status !== "done");
 
   const renderToolCall = (toolCallState: ToolCallState) => {
     const tool = availableTools.find(
@@ -93,7 +92,7 @@ export function ToolCallDiv({
       <div className="border-border rounded-lg border px-4 py-3 pb-0">
         <GroupedToolCallHeader
           toolCallStates={toolCallStates}
-          activeCalls={pendingCalls.length > 0 ? pendingCalls : activeCalls}
+          activeCalls={activeCalls}
           open={open}
           onToggle={() => setOpen(!open)}
         />
