@@ -1,5 +1,6 @@
 import { ContinueAcpServer } from "../acp/server.js";
 import { configureConsoleForHeadless, safeStderr } from "../init.js";
+import { gracefulExit } from "../util/exit.js";
 import { logger } from "../util/logger.js";
 
 import { ExtendedCommandOptions } from "./BaseCommandOptions.js";
@@ -14,6 +15,6 @@ export async function acp(options: ExtendedCommandOptions = {}) {
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     safeStderr(`ACP server failed: ${message}\n`);
-    process.exit(1);
+    await gracefulExit(1);
   }
 }
